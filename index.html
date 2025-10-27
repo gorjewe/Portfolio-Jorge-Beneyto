@@ -5,36 +5,185 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jorge Beneyto — Portfolio</title>
   <style>
-    :root{--accent:#3b82f6;--bg:#0f1724;--card:#10192f;--muted:#a0aec0;--hover:#2563eb}
-    *{box-sizing:border-box;transition:all .25s ease}
-    body{font-family:'Inter',system-ui,sans-serif;margin:0;background:linear-gradient(180deg,#0b1220,#1e293b);color:#f1f5f9;line-height:1.6;scroll-behavior:smooth}
-    header{position:sticky;top:0;background:rgba(15,23,42,.85);backdrop-filter:blur(8px);z-index:10;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.05)}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:48px;height:48px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.2rem;color:white;box-shadow:0 0 8px var(--accent)}
-    nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-weight:500;position:relative}
-    nav a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent);transition:width .3s ease}
-    nav a:hover{color:white}
-    nav a:hover::after{width:100%}
+    :root{
+      --accent:#3b82f6;
+      --bg:#0f1724;
+      --card:#10192f;
+      --muted:#a0aec0;
+      --hover:#2563eb;
+    }
+    *{box-sizing:border-box;transition:all .25s ease;}
+    body{
+      font-family:'Inter',system-ui,sans-serif;
+      margin:0;
+      background:radial-gradient(circle at 20% 20%,#1e293b 0%,#0b1220 100%);
+      color:#f1f5f9;
+      line-height:1.6;
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
 
-    main{max-width:1100px;margin:auto;padding:40px 20px;display:grid;grid-template-columns:1fr 340px;gap:24px}
-    section,aside{animation:fadeIn 1s ease forwards;opacity:0}
-    @keyframes fadeIn{to{opacity:1;}}
-    .card{background:rgba(255,255,255,0.04);padding:22px;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,0.4);margin-bottom:24px}
-    h1,h2,h3{margin-top:0;color:white}
-    .projects .project{padding:16px;border-left:3px solid var(--accent);border-radius:8px;background:rgba(255,255,255,0.03);margin-bottom:14px;transform:translateY(0)}
-    .projects .project:hover{transform:translateY(-4px);box-shadow:0 6px 12px rgba(37,99,235,0.25)}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;margin-top:8px}
-    .btn:hover{background:var(--hover)}
-    .skills{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
-    .skills li{padding:8px 12px;background:rgba(255,255,255,0.05);border-radius:10px;font-size:0.9rem;color:var(--muted)}
-    .skills li:hover{background:var(--accent);color:white;transform:scale(1.05)}
-    .floating-btn{position:fixed;bottom:20px;right:20px;background:var(--accent);color:white;padding:14px 18px;border-radius:50%;font-size:20px;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.4)}
-    .floating-btn:hover{background:var(--hover);transform:rotate(15deg)}
-    footer{text-align:center;padding:20px;color:var(--muted)}
-    @media(max-width:880px){main{grid-template-columns:1fr;}header{flex-direction:column;align-items:flex-start}}
+    /* Fondo animado con partículas */
+    canvas#bg{
+      position:fixed;
+      top:0;left:0;width:100%;height:100%;
+      z-index:-1;
+      background:transparent;
+    }
+
+    header{
+      position:sticky;top:0;
+      background:rgba(15,23,42,.8);
+      backdrop-filter:blur(10px);
+      z-index:10;
+      padding:16px 32px;
+      display:flex;justify-content:space-between;align-items:center;
+      border-bottom:1px solid rgba(255,255,255,.05);
+    }
+
+    .brand{display:flex;align-items:center;gap:12px;}
+    .logo{
+      width:50px;height:50px;border-radius:14px;
+      background:var(--accent);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:1.2rem;
+      color:white;
+      box-shadow:0 0 12px var(--accent);
+      transform:rotate(-5deg);
+    }
+    .logo:hover{transform:rotate(0deg) scale(1.1);box-shadow:0 0 18px var(--accent);}
+
+    nav a{
+      color:var(--muted);
+      text-decoration:none;
+      margin-left:18px;
+      font-weight:500;
+      position:relative;
+      padding-bottom:4px;
+    }
+    nav a::after{
+      content:'';
+      position:absolute;bottom:0;left:0;
+      width:0;height:2px;
+      background:var(--accent);
+      transition:width .3s ease;
+    }
+    nav a:hover{color:white;}
+    nav a:hover::after{width:100%;}
+    nav a.active{color:white;}
+    nav a.active::after{width:100%;}
+
+    main{
+      max-width:1100px;
+      margin:auto;
+      padding:50px 20px;
+      display:grid;
+      grid-template-columns:1fr 340px;
+      gap:28px;
+    }
+
+    section,aside{opacity:0;transform:translateY(30px);}
+    @keyframes fadeInUp{to{opacity:1;transform:translateY(0);}}
+
+    .card{
+      background:rgba(255,255,255,0.04);
+      padding:24px;
+      border-radius:18px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.4);
+      margin-bottom:24px;
+      backdrop-filter:blur(6px);
+      transform-style:preserve-3d;
+    }
+    .card:hover{
+      transform:translateY(-4px) rotateX(2deg) rotateY(-1deg);
+      box-shadow:0 8px 24px rgba(37,99,235,0.25);
+    }
+
+    h1,h2,h3{margin-top:0;color:white;}
+    .projects .project{
+      padding:16px;
+      border-left:3px solid var(--accent);
+      border-radius:10px;
+      background:rgba(255,255,255,0.03);
+      margin-bottom:14px;
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .projects .project:hover{
+      transform:translateY(-5px) scale(1.02);
+      box-shadow:0 8px 20px rgba(37,99,235,0.25);
+    }
+
+    .btn{
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:10px;
+      background:var(--accent);
+      color:white;
+      text-decoration:none;
+      font-weight:600;
+      margin-top:8px;
+      box-shadow:0 0 8px rgba(59,130,246,.4);
+    }
+    .btn:hover{
+      background:var(--hover);
+      transform:translateY(-2px);
+      box-shadow:0 0 14px rgba(37,99,235,.5);
+    }
+
+    .skills{
+      display:flex;flex-wrap:wrap;
+      gap:8px;list-style:none;padding:0;margin:0;
+    }
+    .skills li{
+      padding:8px 12px;
+      background:rgba(255,255,255,0.05);
+      border-radius:10px;
+      font-size:0.9rem;
+      color:var(--muted);
+      cursor:default;
+    }
+    .skills li:hover{
+      background:var(--accent);
+      color:white;
+      transform:scale(1.08);
+      box-shadow:0 0 8px rgba(59,130,246,0.4);
+    }
+
+    .floating-btn{
+      position:fixed;bottom:22px;right:22px;
+      background:var(--accent);
+      color:white;
+      padding:16px;
+      border-radius:50%;
+      font-size:20px;
+      cursor:pointer;
+      box-shadow:0 4px 10px rgba(0,0,0,.4);
+      display:none;
+    }
+    .floating-btn:hover{
+      background:var(--hover);
+      transform:rotate(20deg) scale(1.1);
+    }
+
+    footer{
+      text-align:center;
+      padding:24px;
+      color:var(--muted);
+      font-size:0.9rem;
+      border-top:1px solid rgba(255,255,255,0.05);
+      margin-top:40px;
+    }
+
+    @media(max-width:880px){
+      main{grid-template-columns:1fr;}
+      header{flex-direction:column;align-items:flex-start;}
+      nav{margin-top:10px;}
+    }
   </style>
 </head>
 <body>
+  <canvas id="bg"></canvas>
+
   <header>
     <div class="brand">
       <div class="logo">JB</div>
@@ -90,18 +239,9 @@
       <div class="card" id="skills">
         <h2>Competencias</h2>
         <ul class="skills">
-          <li>Java</li>
-          <li>Kotlin</li>
-          <li>Spring Boot</li>
-          <li>JavaScript</li>
-          <li>React</li>
-          <li>Node.js</li>
-          <li>MySQL</li>
-          <li>Firebase</li>
-          <li>HTML5 & CSS3</li>
-          <li>Git / GitHub</li>
-          <li>Trabajo en equipo</li>
-          <li>Resolución de problemas</li>
+          <li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>JavaScript</li><li>React</li>
+          <li>Node.js</li><li>MySQL</li><li>Firebase</li><li>HTML5 & CSS3</li><li>Git / GitHub</li>
+          <li>Trabajo en equipo</li><li>Resolución de problemas</li>
         </ul>
       </div>
 
@@ -131,9 +271,13 @@
   <div class="floating-btn" id="topBtn">↑</div>
 
   <script>
-    // Animación al hacer scroll
+    // Animación de aparición
     const observer=new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.style.opacity='1';}});
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.style.animation='fadeInUp 0.8s ease forwards';
+        }
+      });
     },{threshold:.2});
     document.querySelectorAll('section,aside').forEach(el=>observer.observe(el));
 
@@ -142,10 +286,47 @@
     btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
     window.addEventListener('scroll',()=>{btn.style.display=window.scrollY>300?'block':'none';});
 
-    // Suavizar enlaces
-    document.querySelectorAll('nav a').forEach(a=>{
-      a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});});
+    // Enlaces suaves + activo
+    const links=document.querySelectorAll('nav a');
+    links.forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const target=document.querySelector(a.getAttribute('href'));
+        target.scrollIntoView({behavior:'smooth'});
+      });
     });
+    window.addEventListener('scroll',()=>{
+      let fromTop=window.scrollY+100;
+      links.forEach(link=>{
+        const section=document.querySelector(link.hash);
+        if(section.offsetTop<=fromTop && section.offsetTop+section.offsetHeight>fromTop){
+          link.classList.add('active');
+        }else link.classList.remove('active');
+      });
+    });
+
+    // Fondo de partículas suaves
+    const canvas=document.getElementById('bg');
+    const ctx=canvas.getContext('2d');
+    let particles=[];
+    const num=50;
+    function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+    window.addEventListener('resize',resize);resize();
+    for(let i=0;i<num;i++){
+      particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-.5)*0.5,dy:(Math.random()-.5)*0.5});
+    }
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='rgba(59,130,246,0.3)';
+      particles.forEach(p=>{
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+        p.x+=p.dx;p.y+=p.dy;
+        if(p.x<0||p.x>canvas.width)p.dx*=-1;
+        if(p.y<0||p.y>canvas.height)p.dy*=-1;
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
   </script>
 </body>
 </html>
